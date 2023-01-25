@@ -21,7 +21,7 @@ app.use(
 
 // <---------sample Home page------------>
 app.get('/', (req, res) => {
-    res.send('Hello World!!')
+    res.send('ECOMM_API !!')
   });
 
 // verify JWT TOKEN-------------------------->
