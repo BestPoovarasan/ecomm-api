@@ -102,7 +102,7 @@ app.post("/login", async function (req, res) {
   });
 
 // <---------------GET METHOD, USER PROFILE DEATILS ----------------->
-  app.get("/:id", authenticate, async function (req, res) {
+  app.get("/getuser", authenticate, async function (req, res) {
     try {
       // Open the Connection
       const connection = await mongoClient.connect(URL);
