@@ -8,9 +8,8 @@ const URL = process.env.DB;
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = process.env.SECRET;
-// const payment = process.env.STRIPE;
 dotenv.config();
-const stripe = require('stripe')("sk_test_51MhRGWSF51UbwnHdBwQoVFmrXgl1nSEjofPBX1COOwZwDH3pXcU2czZ10oT29z2d6GtraGZ450kjp8mFYHovp5K700N2OMuJgy");
+const stripe = require('stripe')(process.env.STRIPE_SECRET_TEST);
 
 //<------- middleware------------>
 app.use(express.json());
@@ -124,7 +123,6 @@ app.post("/login", async function (req, res) {
   });
 
 // <---------------GET METHOD, USER PROFILE DEATILS ----------------->
-<<<<<<< HEAD
 app.get("/getuser", authenticate, async function (req, res) {
   try {
     // Open the Connection
@@ -141,28 +139,6 @@ app.get("/getuser", authenticate, async function (req, res) {
   } catch (error) {
     console.log(error);
   }
-});
-=======
-  app.get("/getuser", authenticate, async function (req, res) {
-    try {
-      // Open the Connection
-      const connection = await mongoClient.connect(URL);
-  
-      // Select the DB
-      const db = connection.db("ecomm");
-  
-      // Select the collection and do the operation
-      let profile = await db
-        .collection("user")
-        .findOne({ _id: mongodb.ObjectId(req.params.id) });
-  
-      // Close the connection
-      await connection.close();
-  
-      res.status(200).json(profile);
-    } catch (error) {
-      console.log(error);
-    }
-  });
->>>>>>> 3a34f334312c5b5a6222401f86390f27c40b995c
+}
+);
 app.listen(process.env.PORT || 3001);
