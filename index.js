@@ -23,7 +23,7 @@ app.use(
 
 // <---------sample Home page------------>
 app.get('/', (req, res) => {
-    res.send('Hello World!!')
+    res.send('ECOMM_API !!')
   });
 // // <---------stripe payment method------------>
   app.post("/payment", (req, res) => {
@@ -124,6 +124,7 @@ app.post("/login", async function (req, res) {
   });
 
 // <---------------GET METHOD, USER PROFILE DEATILS ----------------->
+<<<<<<< HEAD
 app.get("/getuser", authenticate, async function (req, res) {
   try {
     // Open the Connection
@@ -141,6 +142,29 @@ app.get("/getuser", authenticate, async function (req, res) {
     console.log(error);
   }
 });
+=======
+  app.get("/getuser", authenticate, async function (req, res) {
+    try {
+      // Open the Connection
+      const connection = await mongoClient.connect(URL);
+  
+      // Select the DB
+      const db = connection.db("ecomm");
+  
+      // Select the collection and do the operation
+      let profile = await db
+        .collection("user")
+        .findOne({ _id: mongodb.ObjectId(req.params.id) });
+  
+      // Close the connection
+      await connection.close();
+  
+      res.status(200).json(profile);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+>>>>>>> 3a34f334312c5b5a6222401f86390f27c40b995c
 
   
 app.listen(process.env.PORT || 3001);
