@@ -8,7 +8,9 @@ const URL = process.env.DB;
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const key = process.env.SECRET;
+// const payment = process.env.STRIPE;
 dotenv.config();
+const stripe = require('stripe')("sk_test_51MhRGWSF51UbwnHdBwQoVFmrXgl1nSEjofPBX1COOwZwDH3pXcU2czZ10oT29z2d6GtraGZ450kjp8mFYHovp5K700N2OMuJgy");
 
 //<------- middleware------------>
 app.use(express.json());
@@ -23,6 +25,26 @@ app.use(
 app.get('/', (req, res) => {
     res.send('Hello World!!')
   });
+// // <---------stripe payment method------------>
+  app.post("/payment", (req, res) => {
+    console.log(req.body);
+    res.status(200).json("success");
+    stripe.charges.create(
+      {
+        source: req.body.tokenId,
+        amount: req.body.amount,
+        currency,
+      },
+      (stripeErr, stripeRes) => {
+        if (stripeErr) {
+          res.status(500).json(stripeErr);
+        } else {
+          res.status(200).json(stripeRes);
+        }
+      }
+    );
+  });
+
 
 // verify JWT TOKEN-------------------------->
   let authenticate = function (req, res, next) {
@@ -102,26 +124,23 @@ app.post("/login", async function (req, res) {
   });
 
 // <---------------GET METHOD, USER PROFILE DEATILS ----------------->
-  app.get("/:id", authenticate, async function (req, res) {
-    try {
-      // Open the Connection
-      const connection = await mongoClient.connect(URL);
-  
-      // Select the DB
-      const db = connection.db("ecomm");
-  
-      // Select the collection and do the operation
-      let profile = await db
-        .collection("user")
-        .findOne({ _id: mongodb.ObjectId(req.params.id) });
-  
-      // Close the connection
-      await connection.close();
-  
-      res.status(200).json(profile);
-    } catch (error) {
-      console.log(error);
-    }
-  });
+app.get("/getuser", authenticate, async function (req, res) {
+  try {
+    // Open the Connection
+    const connection = await mongoClient.connect(URL);
+    // Select the DB
+    const db = connection.db("ecomm");
+    // Select the collection and do the operation
+    let students = await db
+      .collection("user")
+      .findById({ id: mongodb.ObjectId(req.id) });
+    // Close the connection
+    await connection.close();
+    res.json(students);
+  } catch (error) {
+    console.log(error);
+  }
+});
 
+  
 app.listen(process.env.PORT || 3001);
