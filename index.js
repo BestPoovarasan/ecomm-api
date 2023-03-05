@@ -165,6 +165,4 @@ app.get("/getuser", authenticate, async function (req, res) {
     }
   });
 >>>>>>> 3a34f334312c5b5a6222401f86390f27c40b995c
-
-  
 app.listen(process.env.PORT || 3001);
